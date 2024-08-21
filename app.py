@@ -10,11 +10,11 @@ st.set_page_config(layout="wide")
 grupos_etarios = ['Recém nascidos', 'Juvenis', 'Adultos jovens', 'Adultos velhos']
 
 # Configuração do título do aplicativo
-st.title("Modelo de Leslie para Projeção Populacional")
+st.title("Modelo Estruturado por Idade para Crescimento Populacional")
 
 with st.sidebar:
     # Configuração dos sliders na barra lateral para ajustar os parâmetros da matriz Leslie
-    st.header("Parâmetros do Modelo de Leslie")
+    st.header("Parâmetros do Modelo")
 
     b3 = st.slider(f"Taxa de natalidade de {grupos_etarios[2]} (b3)", min_value=0.0, max_value=5.0, value=1.2, step=0.01)
     b4 = st.slider(f"Taxa de natalidade de {grupos_etarios[3]} (b4)", min_value=0.0, max_value=5.0, value=1.5, step=0.01)
@@ -52,12 +52,14 @@ col01, col02 = st.columns([0.35, 0.65])
 populacao = projeta_populacao(L, v0, t)
 populacao = np.array(populacao)  # Convertendo para array para facilitar o plot
 populacao_df = pd.DataFrame(populacao.T)
-populacao_df['Grupos Etários'] = grupos_etarios
+N = populacao_df.sum()
+populacao_df.loc['Total'] = N
+populacao_df['Grupos Etários'] = grupos_etarios + ['Total']
 populacao_df.set_index('Grupos Etários', inplace=True)
 
 with col01:
     # Exibir a matriz de Leslie
-    st.subheader("Matriz de Transição")
+    st.subheader("Matriz de Leslie")
     st.write(L_df)    
 
 with col02:
