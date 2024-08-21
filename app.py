@@ -3,6 +3,8 @@ import numpy as np
 import plotly.graph_objects as go
 from aux_fun import cria_matriz_leslie, projeta_populacao
 
+st.set_page_config(layout="wide")
+
 # Grupos etários
 grupos_etarios = ['Recém nascidos', 'Juvenis', 'Adultos jovens', 'Adultos velhos']
 
@@ -12,8 +14,8 @@ st.title("Modelo de Leslie para Projeção Populacional")
 # Configuração dos sliders na barra lateral para ajustar os parâmetros da matriz Leslie
 st.sidebar.header("Parâmetros do Modelo de Leslie")
 
-b3 = st.sidebar.slider(f"Taxa de natalidade de {grupos_etarios[3]} (b3)", min_value=0.0, max_value=5.0, value=1.2, step=0.01)
-b4 = st.sidebar.slider(f"Taxa de natalidade de {grupos_etarios[4]} (b4)", min_value=0.0, max_value=5.0, value=1.5, step=0.01)
+b3 = st.sidebar.slider(f"Taxa de natalidade de {grupos_etarios[2]} (b3)", min_value=0.0, max_value=5.0, value=1.2, step=0.01)
+b4 = st.sidebar.slider(f"Taxa de natalidade de {grupos_etarios[3]} (b4)", min_value=0.0, max_value=5.0, value=1.5, step=0.01)
 s1 = st.sidebar.slider(f"Taxa de sobrevivência de {grupos_etarios[0]} (s1)", min_value=0.0, max_value=1.0, value=0.6, step=0.01)
 s2 = st.sidebar.slider(f"Taxa de sobrevivência de {grupos_etarios[1]} (s2)", min_value=0.0, max_value=1.0, value=0.7, step=0.01)
 s3 = st.sidebar.slider(f"Taxa de sobrevivência de {grupos_etarios[2]} (s3)", min_value=0.0, max_value=1.0, value=0.8, step=0.01)
