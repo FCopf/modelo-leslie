@@ -11,6 +11,7 @@ grupos_etarios = ['Recém nascidos', 'Juvenis', 'Adultos jovens', 'Adultos velho
 
 # Configuração do título do aplicativo
 st.title("Modelo Estruturado por Idade para Crescimento Populacional")
+ck_rel = st.checkbox('Visualizar valores relativos')
 
 with st.sidebar:
     # Configuração dos sliders na barra lateral para ajustar os parâmetros da matriz Leslie
@@ -51,6 +52,9 @@ col01, col02 = st.columns([0.35, 0.65])
 # Projeção da população ao longo do tempo
 populacao = projeta_populacao(L, v0, t)
 populacao = np.array(populacao)  # Convertendo para array para facilitar o plot
+if (ck_rel):
+    populacao = populacao / np.sum(populacao, axis = 1, keepdims=True)
+
 populacao_df = pd.DataFrame(populacao.T)
 N = populacao_df.sum()
 populacao_df.loc['Total'] = N
@@ -92,11 +96,19 @@ with col1:
 # Gráfico de Pirâmide Etária (percentual)
 with col2:
     st.subheader("Pirâmide Etária")
-    percentual_final = populacao[-1] / np.sum(populacao[-1]) * 100
+    
+    if ck_rel:
+        # v_final = populacao[-1] / np.sum(populacao[-1]) * 100
+        v_final = populacao[-1] * 100
+        xtitle = "Percentual da População (%)"
+    else:
+        v_final = populacao[-1]
+        xtitle = 'Tamanho populacional'
+    
     fig_pyramid = go.Figure(go.Bar(
         y=grupos_etarios,
-        x=percentual_final,
+        x=v_final,
         orientation='h'
     ))
-    fig_pyramid.update_layout(xaxis_title="Percentual da População (%)")
+    fig_pyramid.update_layout(xaxis_title=xtitle)
     st.plotly_chart(fig_pyramid)
